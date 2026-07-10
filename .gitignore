@@ -1,5 +1,7 @@
-.env
-__pycache__/
-*.pyc
-ragenv/
-chroma_db/
+backend/.env
+backend/__pycache__/
+backend/*.pyc
+backend/ragenv/
+backend/chroma_db/
+frontend/node_modules/
+frontend/dist/
