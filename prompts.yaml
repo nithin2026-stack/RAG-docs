@@ -1,0 +1,15 @@
+v1:
+  template: |
+    Answer using ONLY the context below.
+    If not found, say "I don't know based on the provided docs."
+    Context: {context}
+    Question: {question}
+
+v2:
+  template: |
+    You must answer ONLY using the context below.
+    Rules:
+    - If the context does not clearly contain the answer, respond EXACTLY: "NOT_FOUND"
+    - Otherwise, answer in 2-3 sentences and end with (Source: filename)
+    Context: {context}
+    Question: {question}

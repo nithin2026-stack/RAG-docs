@@ -1,0 +1,108 @@
+{
+  "faithfulness": 0.9270588235294117,
+  "relevancy": 0.8676470588235294,
+  "details": [
+    {
+      "question": "How do you define a path parameter in FastAPI?",
+      "answer": "You can define a path parameter in FastAPI using the Python syntax for format strings within curly brackets `{}` in the path of a route, similar to how you would declare a variable in a Python string. For example, using the syntax `\"{item_id}\"` within the path of a route, like `/items/{item_id}`. The value of the path parameter will be passed to your function as an argument. Additionally, you can specify the type of a path parameter using standard Python type annotations, like `item_id: int`. This allows for automatic data conversion and validation, giving you benefits like editor support, data parsing, data validation, and automatic API documentation.",
+      "faithfulness": 0.9,
+      "relevancy": 1.0
+    },
+    {
+      "question": "What is the purpose of the Depends function?",
+      "answer": "The Depends function in FastAPI is used to declare dependencies that need to be injected before a path operation function is executed. It allows you to specify a dependency, which can be a function, and FastAPI will take care of calling it with the correct parameters and passing the results to the path operation function. This way, you can share common code and logic across multiple path operations without duplicating it. (Source: dependencies.txt)",
+      "faithfulness": 0.98,
+      "relevancy": 1.0
+    },
+    {
+      "question": "How do you define a query parameter in FastAPI?",
+      "answer": "You define a query parameter in FastAPI by declaring it as a function parameter with a type annotation, and then marking it with the name of the parameter in the URL path. For example: \n\nPython 3.10+ from fastapi import FastAPI app = FastAPI () @app . get ( \"/items/\" ) async def read_item ( skip : int = 0 , limit : int = 10 ): return fake_items_db [ skip : skip + limit ] \n\nIn this example, \"skip\" and \"limit\" are query parameters.\n\n(Source: query-params.txt)",
+      "faithfulness": 0.9,
+      "relevancy": 0.6
+    },
+    {
+      "question": "How do you send data in a request body?",
+      "answer": "To send data in a request body, you use Pydantic models, which are classes that inherit from Pydantic's BaseModel. These models define the structure of the data that can be sent in the request body. You can then use the model as a type hint for the parameter in the path operation, and FastAPI will automatically deserialize the request body into an instance of the model. This provides validation, automatic documentation, and editor-supported type hints.\n\n(Source: request-body.txt)",
+      "faithfulness": 0.99,
+      "relevancy": 0.4
+    },
+    {
+      "question": "What is FastAPI's Dependency Injection system used for?",
+      "answer": "FastAPI's Dependency Injection system is used for declaring dependencies that can be provided by the system, to be executed before the path operation function. It allows developers to define shared logic, database connections, security, authentication, and other things while minimizing code repetition.\n\n(Source: dependencies.txt)",
+      "faithfulness": 0.95,
+      "relevancy": 0.8
+    },
+    {
+      "question": "How do you deploy FastAPI to AWS Lambda?",
+      "answer": "NOT_FOUND",
+      "faithfulness": 1.0,
+      "relevancy": 1.0
+    },
+    {
+      "question": "What does the first-steps FastAPI example return by default?",
+      "answer": "The first-steps FastAPI example returns a dictionary with the message \"Hello World\" by default. (Source: tutorial-first-steps.txt)",
+      "faithfulness": 0.9,
+      "relevancy": 0.9
+    },
+    {
+      "question": "How do you run a FastAPI application locally?",
+      "answer": "To run a FastAPI application locally, you can use the command `fastapi dev` and it will guess the FastAPI app object to use. The server will start at the following URL: http://127.0.0.1:8000. (Source: tutorial-first-steps.txt)",
+      "faithfulness": 0.85,
+      "relevancy": 1.0
+    },
+    {
+      "question": "What type hints does FastAPI use path parameters for?",
+      "answer": "FastAPI uses standard Python type annotations for path parameters. For example, it can declare the type of a path parameter as an int, str, float, bool, and many complex data types, similar to Pydantic. (Source: path-params.txt)",
+      "faithfulness": 0.9,
+      "relevancy": 1.0
+    },
+    {
+      "question": "What happens if you send an invalid type for a path parameter?",
+      "answer": "If you send an invalid type for a path parameter, FastAPI gives you an automatic HTTP error with a detailed error message. It will attempt to \"parse\" and \"validate\" the path parameter, and if it fails, it will return an error like: \"Input should be a valid integer, unable to parse string as an integer\" along with the \"loc\" pointing to the path and the \"input\" value. (Source: path-params.txt)",
+      "faithfulness": 0.9,
+      "relevancy": 0.8
+    },
+    {
+      "question": "Are query parameters required or optional by default in FastAPI?",
+      "answer": "In FastAPI, query parameters are optional by default. This is because query parameters don't have a fixed part of the URL, they can be added or not. So, by default, they are optional. However, you can make them required by setting a default value to None or by not setting a default value at all. (Source: query-params.txt)",
+      "faithfulness": 0.9,
+      "relevancy": 0.9
+    },
+    {
+      "question": "How do you give a query parameter a default value?",
+      "answer": "To give a query parameter a default value, you simply need to assign a default value to it in the function parameter declaration. The syntax is as follows: Python `param_name: param_type = default_value`. For example, in the following code snippet, the `limit` query parameter has a default value of `10`: `limit: int = 10`. (Source: query-params.txt)",
+      "faithfulness": 1.0,
+      "relevancy": 0.9
+    },
+    {
+      "question": "What library does FastAPI use to define request body models?",
+      "answer": "FastAPI uses Pydantic's BaseModel to define request body models. (Source: request-body.txt)",
+      "faithfulness": 0.8,
+      "relevancy": 0.9
+    },
+    {
+      "question": "Can you combine path parameters, query parameters, and a request body in one endpoint?",
+      "answer": "Yes, you can combine path parameters, query parameters, and a request body in one endpoint. FastAPI will recognize each of them and take the data from the correct place.\n\nYou can declare body, path, and query parameters, all at the same time, using Pydantic models for the request body, and standard Python types for path and query parameters.\n\nPython 3.10+ from fastapi import FastAPI from pydantic import BaseModel \n\nclass Item(BaseModel): \n    name : str \n    description : str | None = None \n    price : float \n    tax : float | None = None \n\napp = FastAPI() \n\n@app.put(\"/items/{item_id}\") \nasync def update_item(item_id: int, item: Item, q: str | None = None): \n    result = {\"item_id\": item_id, **item.model_dump()} \n    if q: \n        result.update({\"q\": q}) \n    return result \n\n(Source: request-body.txt)",
+      "faithfulness": 0.9,
+      "relevancy": 0.85
+    },
+    {
+      "question": "How does FastAPI validate a request body automatically?",
+      "answer": "FastAPI will automatically validate the request body by checking it against the schema generated from the Pydantic model declaration. It will return a nice and clear error if the data is invalid, indicating exactly where and what was the incorrect data (Source: request-body.txt).",
+      "faithfulness": 0.9,
+      "relevancy": 0.8
+    },
+    {
+      "question": "Can a dependency in FastAPI have its own sub-dependencies?",
+      "answer": "Yes, a dependency in FastAPI can define sub-dependencies, and FastAPI will take care of solving and providing the results for these sub-dependencies. In fact, a hierarchical tree of dependencies can be built, allowing for quite complex dependency relationships to be established. (Source: dependencies.txt)",
+      "faithfulness": 0.99,
+      "relevancy": 0.9
+    },
+    {
+      "question": "How do you connect FastAPI to a PostgreSQL database?",
+      "answer": "NOT_FOUND",
+      "faithfulness": 1.0,
+      "relevancy": 1.0
+    }
+  ]
+}
