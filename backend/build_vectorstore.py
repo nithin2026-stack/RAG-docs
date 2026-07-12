@@ -2,20 +2,25 @@ import json
 import chromadb
 from sentence_transformers import SentenceTransformer
 
-with open("chunks.json", encoding="utf-8") as f:
-    chunks = json.load(f)
+def build_vectorstore():
+    with open("chunks.json", encoding="utf-8") as f:
+        chunks = json.load(f)
 
-embedder = SentenceTransformer("all-MiniLM-L6-v2")
+    embedder = SentenceTransformer("all-MiniLM-L6-v2")
+    client = chromadb.PersistentClient(path="./chroma_db")
+    collection = client.get_or_create_collection("fastapi_docs")
 
-client = chromadb.PersistentClient(path="./chroma_db")
-collection = client.get_or_create_collection("fastapi_docs")
+    texts = [c["text"] for c in chunks]
+    ids = [c["id"] for c in chunks]
+    metadatas = [{"source": c["source"]} for c in chunks]
 
-texts = [c["text"] for c in chunks]
-ids = [c["id"] for c in chunks]
-metadatas = [{"source": c["source"]} for c in chunks]
+    embeddings = embedder.encode(texts).tolist()
 
-embeddings = embedder.encode(texts).tolist()
+    # Upsert so re-running doesn't duplicate/crash on existing IDs
+    collection.upsert(ids=ids, embeddings=embeddings, documents=texts, metadatas=metadatas)
 
-collection.add(ids=ids, embeddings=embeddings, documents=texts, metadatas=metadatas)
+    print(f"Stored {len(chunks)} chunks in ChromaDB")
+    return len(chunks)
 
-print(f"Stored {len(chunks)} chunks in ChromaDB")
+if __name__ == "__main__":
+    build_vectorstore()
