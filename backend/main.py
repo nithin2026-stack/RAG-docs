@@ -28,11 +28,23 @@ def verify_key(x_api_key: str = Header(None)):
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # React dev server
+    allow_origins=[
+        "http://localhost:5173",
+        "https://askyourdocs.vercel.app",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.on_event("startup")
+def startup_event():
+    # On a fresh server (like Render's first boot), the vector store is empty.
+    # Rebuild it from chunks.json, which IS committed to the repo.
+    if hybrid_search.collection.count() == 0 and os.path.exists("chunks.json"):
+        build_vectorstore()
+        hybrid_search.load_index()
 
 os.makedirs("docs", exist_ok=True)
 os.makedirs("uploads", exist_ok=True)

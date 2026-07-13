@@ -5,7 +5,7 @@ from sentence_transformers import SentenceTransformer
 
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 client = chromadb.PersistentClient(path="./chroma_db")
-collection = client.get_collection("fastapi_docs")
+collection = client.get_or_create_collection("fastapi_docs")
 
 chunks = []
 bm25 = None
