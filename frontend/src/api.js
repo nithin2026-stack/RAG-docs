@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8000";
+const API_BASE = "https://rag-docs-production.up.railway.app";
 const API_KEY = "7f3c124f5a232ce8817d2d4f461231ee071825f4460178222751379652199c2d";
 
 export function uploadFileWithProgress(file, onProgress) {
