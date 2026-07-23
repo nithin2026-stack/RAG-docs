@@ -28,10 +28,7 @@ def verify_key(x_api_key: str = Header(None)):
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "https://askyourdocs.vercel.app",
-    ],
+    allow_origin_regex=r"https://(localhost:5173|rag-docs.*\.vercel\.app)",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
